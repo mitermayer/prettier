@@ -1,5 +1,51 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`0-indent.js 1`] = `
+md\`
+This line shouldn't be indented at all in the resulting output.
+\`
+
+if (true) {
+  md\`
+text1
+- 123
+  - 456
+
+text2
+- 123
+  - 456
+
+text3
+- 123
+  - 456
+\`;
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+md\`
+This line shouldn't be indented at all in the resulting output.
+\`;
+
+if (true) {
+  md\`
+text1
+
+* 123
+  * 456
+
+text2
+
+* 123
+  * 456
+
+text3
+
+* 123
+  * 456
+  \`;
+}
+
+`;
+
 exports[`codeblock.js 1`] = `
 md\`
 \\\`\\\`\\\`js
@@ -12,15 +58,13 @@ markdown\\\`
 \`;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 md\`
+~~~js
+markdown\\\`
   ~~~js
-  markdown\\\`
-    ~~~js
-    console.log("hi");
-    ~~~
-
-  \\\`;
+  console.log("hi");
   ~~~
-
+\\\`;
+~~~
 \`;
 
 `;
@@ -73,8 +117,16 @@ export default function ReadMe() {
       because he has a million decisions to make and he didn't want to be
       bothered to make trivial ones like picking out clothes. I think Prettier
       is like that.”
-
   \`;
 }
+
+`;
+
+exports[`single-line.js 1`] = `
+markdown\`# hello\`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+markdown\`
+# hello
+\`;
 
 `;

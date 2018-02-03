@@ -5,11 +5,13 @@
       "why-prettier",
       "comparison",
       "language-support",
+      "option-philosophy",
       "rationale"
     ],
     "Usage": [
       "install",
       "cli",
+      "plugins",
       "precommit",
       "watching-files",
       "eslint",

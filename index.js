@@ -1,18 +1,22 @@
 "use strict";
 
-const stripBom = require("strip-bom");
-const comments = require("./src/comments");
-const version = require("./package.json").version;
-const printAstToDoc = require("./src/printer").printAstToDoc;
-const util = require("./src/util");
-const printDocToString = require("./src/doc-printer").printDocToString;
-const normalizeOptions = require("./src/options").normalize;
-const parser = require("./src/parser");
-const printDocToDebug = require("./src/doc-debug").printDocToDebug;
-const config = require("./src/resolve-config");
-const getSupportInfo = require("./src/support").getSupportInfo;
 const docblock = require("jest-docblock");
-const getStream = require("get-stream");
+
+const version = require("./package.json").version;
+
+const util = require("./src/common/util");
+const getSupportInfo = require("./src/common/support").getSupportInfo;
+
+const comments = require("./src/main/comments");
+const printAstToDoc = require("./src/main/ast-to-doc");
+const normalizeOptions = require("./src/main/options").normalize;
+const parser = require("./src/main/parser");
+
+const config = require("./src/config/resolve-config");
+
+const doc = require("./src/doc");
+const printDocToString = doc.printer.printDocToString;
+const printDocToDebug = doc.debug.printDocToDebug;
 
 function guessLineEnding(text) {
   const index = text.indexOf("\n");
@@ -68,7 +72,11 @@ function formatWithCursor(text, opts, addAlignmentSize) {
     return { formatted: text };
   }
 
-  text = stripBom(text);
+  const UTF8BOM = 0xfeff;
+  const hasUnicodeBOM = text.charCodeAt(0) === UTF8BOM;
+  if (hasUnicodeBOM) {
+    text = text.substring(1);
+  }
 
   if (
     opts.insertPragma &&
@@ -80,7 +88,7 @@ function formatWithCursor(text, opts, addAlignmentSize) {
     const pragmas = Object.assign({ format: "" }, parsedDocblock.pragmas);
     const newDocblock = docblock.print({
       pragmas,
-      comments: parsedDocblock.comments.replace(/^(\r?\n)+/, "") // remove leading newlines
+      comments: parsedDocblock.comments.replace(/^(\s+?\r?\n)+/, "") // remove leading newlines
     });
     const strippedText = docblock.strip(text);
     const separatingNewlines = strippedText.startsWith("\n") ? "\n" : "\n\n";
@@ -89,7 +97,9 @@ function formatWithCursor(text, opts, addAlignmentSize) {
 
   addAlignmentSize = addAlignmentSize || 0;
 
-  const ast = parser.parse(text, opts);
+  const result = parser.parse(text, opts);
+  const ast = result.ast;
+  text = result.text;
 
   const formattedRangeOnly = formatRange(text, opts, ast);
   if (formattedRangeOnly) {
@@ -98,7 +108,7 @@ function formatWithCursor(text, opts, addAlignmentSize) {
 
   let cursorOffset;
   if (opts.cursorOffset >= 0) {
-    const cursorNodeAndParents = findNodeAtOffset(ast, opts.cursorOffset);
+    const cursorNodeAndParents = findNodeAtOffset(ast, opts.cursorOffset, opts);
     const cursorNode = cursorNodeAndParents.node;
     if (cursorNode) {
       cursorOffset = opts.cursorOffset - util.locStart(cursorNode);
@@ -110,7 +120,10 @@ function formatWithCursor(text, opts, addAlignmentSize) {
   const doc = printAstToDoc(ast, opts, addAlignmentSize);
   opts.newLine = guessLineEnding(text);
   const toStringResult = printDocToString(doc, opts);
-  const str = toStringResult.formatted;
+  let str = toStringResult.formatted;
+  if (hasUnicodeBOM) {
+    str = String.fromCharCode(UTF8BOM) + str;
+  }
   const cursorOffsetResult = toStringResult.cursor;
   ensureAllCommentsPrinted(astComments);
   // Remove extra leading indentation as well as the added indentation after last newline
@@ -173,16 +186,21 @@ function findSiblingAncestors(startNodeAndParents, endNodeAndParents) {
   };
 }
 
-function findNodeAtOffset(node, offset, predicate, parentNodes) {
+function findNodeAtOffset(node, offset, options, predicate, parentNodes) {
   predicate = predicate || (() => true);
   parentNodes = parentNodes || [];
   const start = util.locStart(node);
   const end = util.locEnd(node);
   if (start <= offset && offset <= end) {
-    for (const childNode of comments.getSortedChildNodes(node)) {
+    for (const childNode of comments.getSortedChildNodes(
+      node,
+      undefined /* text */,
+      options
+    )) {
       const childResult = findNodeAtOffset(
         childNode,
         offset,
+        options,
         predicate,
         [node].concat(parentNodes)
       );
@@ -232,10 +250,10 @@ function isSourceElement(opts, node) {
     "ExportNamedDeclaration", // Module
     "ExportAllDeclaration", // Module
     "TypeAlias", // Flow
-    "InterfaceDeclaration", // Flow, Typescript
-    "TypeAliasDeclaration", // Typescript
-    "ExportAssignment", // Typescript
-    "ExportDeclaration" // Typescript
+    "InterfaceDeclaration", // Flow, TypeScript
+    "TypeAliasDeclaration", // TypeScript
+    "ExportAssignment", // TypeScript
+    "ExportDeclaration" // TypeScript
   ];
   const jsonSourceElements = [
     "ObjectExpression",
@@ -295,11 +313,17 @@ function calculateRange(text, opts, ast) {
     }
   }
 
-  const startNodeAndParents = findNodeAtOffset(ast, startNonWhitespace, node =>
-    isSourceElement(opts, node)
+  const startNodeAndParents = findNodeAtOffset(
+    ast,
+    startNonWhitespace,
+    opts,
+    node => isSourceElement(opts, node)
   );
-  const endNodeAndParents = findNodeAtOffset(ast, endNonWhitespace, node =>
-    isSourceElement(opts, node)
+  const endNodeAndParents = findNodeAtOffset(
+    ast,
+    endNonWhitespace,
+    opts,
+    node => isSourceElement(opts, node)
   );
 
   if (!startNodeAndParents || !endNodeAndParents) {
@@ -380,6 +404,8 @@ module.exports = {
     }
   },
 
+  doc,
+
   resolveConfig: config.resolveConfig,
   clearConfigCache: config.clearCache,
 
@@ -389,8 +415,8 @@ module.exports = {
 
   /* istanbul ignore next */
   __debug: {
-    getStream,
     parse: function(text, opts) {
+      opts = normalizeOptions(opts);
       return parser.parse(text, opts);
     },
     formatAST: function(ast, opts) {
@@ -408,7 +434,9 @@ module.exports = {
     },
     printToDoc: function(text, opts) {
       opts = normalizeOptions(opts);
-      const ast = parser.parse(text, opts);
+      const result = parser.parse(text, opts);
+      const ast = result.ast;
+      text = result.text;
       attachComments(text, ast, opts);
       const doc = printAstToDoc(ast, opts);
       return doc;

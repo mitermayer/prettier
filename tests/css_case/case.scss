@@ -1,12 +1,14 @@
 // Convention in this test file:
 // - The case should be preserved for things prefixed with "Keep".
-// - The case should always be preserved for function names and property keywords.
+// - The case should always be preserved for element names and attribute names
+//   in selectors, as well as function names and property keywords.
 // - Other things should mostly be lowercase.
 
 @IMPORT Keep;
 
 HTML#KeepId.KeepClass,
 a[HREF=KeepAttrValue]:HOVER::FIRST-letter,
+svg[viewBox] linearGradient,
 :Not(:NTH-child(2N+1)) {
     COLOR: #AAbbCC;
     BACKGROUND-image: URL("KeepString");
@@ -15,6 +17,14 @@ a[HREF=KeepAttrValue]:HOVER::FIRST-letter,
     background: Var(--Keep-custom-Prop);
     animation-name: KeepAnimationName;
     important: something !IMPORTANT;
+    font-family: INITIAL;
+    padding: UNSET;
+    border: INHERIT;
+    all: REVERT;
+    -WEBKIT-USER-SELECT: none;
+    -MOZ-USER-SELECT: none;
+    -MS-USER-SELECT: none;
+    USER-SELECT: none;
 }
 
 @keyframes KeepAnimationName {
@@ -23,7 +33,7 @@ a[HREF=KeepAttrValue]:HOVER::FIRST-letter,
   }
 
   #{$KeepInterpolationVar},
-  #{$Keep + 15PX},
+  #{$Keep + 15PX + Keep15PX + '15PX' + "15PX"},
   #{$Keep + $Keep15PX} {
     prop: val;
   }
@@ -36,8 +46,8 @@ a[HREF=KeepAttrValue]:HOVER::FIRST-letter,
 @custom-media --KeepCustomMedia screen and (width >= 768px);
 @media (--KeepCustomMedia) {}
 
-@FUNCTION KeepFuncName() {
-    @RETURN 12;
+@function KeepFuncName() {
+    @return 12;
 }
 
 %KeepPlaceholderSelector {
@@ -47,7 +57,7 @@ a[HREF=KeepAttrValue]:HOVER::FIRST-letter,
 $KeepTopLevelVar: val;
 @KeepLessVar: val;
 
-@MIXIN KeepMixinName($Keep: 15IN, $Keep: $Keep15IN, $Keep: Keep-1E-2Em) {
+@mixin KeepMixinName($Keep: 15IN, $Keep: $Keep15IN, $Keep: Keep-1E-2Em) {
     $KeepVar: KeepFuncName();
     #{$KeepInterpolationVar}: val;
     #{$Keep + 15PX}: val;
@@ -59,7 +69,7 @@ $KeepTopLevelVar: val;
       prop: val;
     }
 
-    &Keep & NoKeep {
+    &Keep & Element {
       prop: val;
     }
 
@@ -76,7 +86,7 @@ $KeepTopLevelVar: val;
     }
 }
 
-@Mixin Keep($Keep: $Keep15IN, $Keep: Keepå1E1) {}
+@mixin Keep($Keep: $Keep15IN, $Keep: Keepå1E1) {}
 
 @MEDIA (MIN-WIDTH: 700PX) {
     @include Keep;
@@ -85,3 +95,27 @@ $KeepTopLevelVar: val;
 }
 
 @MEDIA (#{$Keep}: #{$Keep}) {}
+
+@KEYFRAMES identifier {
+  FROM {
+    margin-top: 50px;
+  }
+  50%  {
+    margin-top: 150px;
+  }
+  TO {
+    margin-top: 100px;
+  }
+}
+
+@-WEBKIT-KEYFRAMES float-up {
+  FROM {
+    margin-top: 50px;
+  }
+  50%  {
+    margin-top: 150px;
+  }
+  TO {
+    margin-top: 100px;
+  }
+}

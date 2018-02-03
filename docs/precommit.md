@@ -7,6 +7,8 @@ You can use Prettier with a pre-commit tool. This can re-format your files that 
 
 ## Option 1. [lint-staged](https://github.com/okonet/lint-staged)
 
+**Use Case:** Useful for when you need to use other tools on top of Prettier (e.g. ESLint)
+
 Install it along with [husky](https://github.com/typicode/husky):
 
 ```bash
@@ -21,34 +23,77 @@ and add this config to your `package.json`:
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,json,css}": [
-      "prettier --write",
-      "git add"
-    ]
+    "*.{js,json,css,md}": ["prettier --write", "git add"]
   }
 }
 ```
-There is a limitation where if you stage specific lines this approach will stage the whole file after regardless. See this [issue](https://github.com/okonet/lint-staged/issues/62) for more info.
+
+**Warning:** Currently there is a limitation where if you stage specific lines this approach will stage the whole file after formatting. See this [issue](https://github.com/okonet/lint-staged/issues/62) for more info.
 
 See https://github.com/okonet/lint-staged#configuration for more details about how you can configure lint-staged.
 
+## Option 2. [pretty-quick](https://github.com/azz/pretty-quick)
 
-## Option 2. [pre-commit](https://github.com/pre-commit/pre-commit)
+**Use Case:** Great for when you want an entire file formatting on your changed/staged files.
+
+Install it along with [husky](https://github.com/typicode/husky):
+
+```bash
+yarn add pretty-quick husky --dev
+```
+
+and add this config to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "precommit": "pretty-quick --staged"
+  }
+}
+```
+
+Find more info from [here](https://github.com/azz/pretty-quick).
+
+## Option 3. [pre-commit](https://github.com/pre-commit/pre-commit) (Python version)
+
+**Use Case:** Great when working with multi-language projects.
 
 Copy the following config into your `.pre-commit-config.yaml` file:
 
 ```yaml
-
     -   repo: https://github.com/prettier/prettier
         sha: ''  # Use the sha or tag you want to point at
         hooks:
         -   id: prettier
-
 ```
 
 Find more info from [here](http://pre-commit.com).
 
-## Option 3. bash script
+## Option 4. [precise-commits](https://github.com/JamesHenry/precise-commits)
+
+**Use Case:** Great for when you want an partial file formatting on your changed/staged files.
+
+Install it along with [husky](https://github.com/typicode/husky):
+
+```bash
+yarn add precise-commits husky --dev
+```
+
+and add this config to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "precommit": "precise-commits"
+  }
+}
+```
+
+**Note:** This is currently the only tool that will format only staged lines rather than the entire file. See more information [here](https://github.com/JamesHenry/precise-commits#why-precise-commits)
+
+Read more about this tool [here](https://github.com/JamesHenry/precise-commits#2-precommit-hook).
+
+## Option 5. bash script
 
 Alternately you can save this script as `.git/hooks/pre-commit` and give it execute permission:
 

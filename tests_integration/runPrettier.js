@@ -3,11 +3,15 @@
 const fs = require("fs");
 const path = require("path");
 const stripAnsi = require("strip-ansi");
-const ENV_LOG_LEVEL = require("../src/cli-logger").ENV_LOG_LEVEL;
 
 const isProduction = process.env.NODE_ENV === "production";
-const prettierApi = isProduction ? "../dist/index" : "../index";
-const prettierCli = isProduction ? "../dist/bin/prettier" : "../bin/prettier";
+const prettierRootDir = isProduction ? process.env.PRETTIER_DIR : "../";
+const prettierPkg = require(path.join(prettierRootDir, "package.json"));
+const prettierCli = path.join(prettierRootDir, prettierPkg.bin.prettier);
+
+const thirdParty = isProduction
+  ? path.join(prettierRootDir, "./third-party")
+  : path.join(prettierRootDir, "./src/common/third-party");
 
 function runPrettier(dir, args, options) {
   args = args || [];
@@ -56,7 +60,6 @@ function runPrettier(dir, args, options) {
   const originalExitCode = process.exitCode;
   const originalStdinIsTTY = process.stdin.isTTY;
   const originalStdoutIsTTY = process.stdout.isTTY;
-  const originalEnvLogLevel = process.env[ENV_LOG_LEVEL];
 
   process.chdir(normalizeDir(dir));
   process.stdin.isTTY = !!options.isTTY;
@@ -68,11 +71,17 @@ function runPrettier(dir, args, options) {
   // We cannot use `jest.setMock("get-stream", impl)` here, because in the
   // production build everything is bundled into one file so there is no
   // "get-stream" module to mock.
+  jest.spyOn(require(thirdParty), "getStream").mockImplementation(() => ({
+    then: handler => handler(options.input || "")
+  }));
   jest
-    .spyOn(require(prettierApi).__debug, "getStream")
-    .mockImplementation(() => ({
-      then: handler => handler(options.input || "")
-    }));
+    .spyOn(require(thirdParty), "cosmiconfig")
+    .mockImplementation((moduleName, options) =>
+      require("cosmiconfig")(
+        moduleName,
+        Object.assign({}, options, { stopDir: __dirname })
+      )
+    );
 
   try {
     require(prettierCli);
@@ -86,7 +95,6 @@ function runPrettier(dir, args, options) {
     process.exitCode = originalExitCode;
     process.stdin.isTTY = originalStdinIsTTY;
     process.stdout.isTTY = originalStdoutIsTTY;
-    process.env[ENV_LOG_LEVEL] = originalEnvLogLevel;
     jest.restoreAllMocks();
   }
 
