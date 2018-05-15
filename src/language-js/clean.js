@@ -1,6 +1,20 @@
 "use strict";
 
 function clean(ast, newObj, parent) {
+  [
+    "range",
+    "raw",
+    "comments",
+    "leadingComments",
+    "trailingComments",
+    "extra",
+    "start",
+    "end",
+    "flags"
+  ].forEach(name => {
+    delete newObj[name];
+  });
+
   // We remove extra `;` and add them when needed
   if (ast.type === "EmptyStatement") {
     return null;
@@ -61,13 +75,16 @@ function clean(ast, newObj, parent) {
   // We change {'key': value} into {key: value}
   if (
     (ast.type === "Property" ||
+      ast.type === "ObjectProperty" ||
       ast.type === "MethodDefinition" ||
       ast.type === "ClassProperty" ||
       ast.type === "TSPropertySignature" ||
       ast.type === "ObjectTypeProperty") &&
     typeof ast.key === "object" &&
     ast.key &&
-    (ast.key.type === "Literal" || ast.key.type === "Identifier")
+    (ast.key.type === "Literal" ||
+      ast.key.type === "StringLiteral" ||
+      ast.key.type === "Identifier")
   ) {
     delete newObj.key;
   }
@@ -119,12 +136,24 @@ function clean(ast, newObj, parent) {
   ) {
     newObj.quasi.quasis.forEach(quasi => delete quasi.value);
   }
-  if (
-    ast.type === "TemplateLiteral" &&
-    parent.type === "CallExpression" &&
-    parent.callee.name === "graphql"
-  ) {
-    newObj.quasis.forEach(quasi => delete quasi.value);
+  if (ast.type === "TemplateLiteral") {
+    // This checks for a leading comment that is exactly `/* GraphQL */`
+    // In order to be in line with other implementations of this comment tag
+    // we will not trim the comment value and we will expect exactly one space on
+    // either side of the GraphQL string
+    // Also see ./embed.js
+    const hasGraphQLComment =
+      ast.leadingComments &&
+      ast.leadingComments.some(
+        comment =>
+          comment.type === "CommentBlock" && comment.value === " GraphQL "
+      );
+    if (
+      hasGraphQLComment ||
+      (parent.type === "CallExpression" && parent.callee.name === "graphql")
+    ) {
+      newObj.quasis.forEach(quasi => delete quasi.value);
+    }
   }
 }
 

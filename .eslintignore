@@ -3,7 +3,10 @@
 !/tests/**/jsfmt.spec.js
 !/**/.eslintrc.js
 /test.js
+/coverage/
 /dist/
 **/node_modules/**
+/website/build/
+/website/static/playground.js
 /website/static/lib/
 /tests_integration/cli/

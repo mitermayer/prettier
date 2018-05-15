@@ -4,7 +4,7 @@
 
 const path = require("path");
 const pkg = require("../../package.json");
-const formatMarkdown = require("../../website/static/markdown");
+const formatMarkdown = require("../../website/playground/markdown");
 const parsers = require("./parsers");
 const shell = require("shelljs");
 
@@ -92,6 +92,7 @@ pkgWithoutDependencies.scripts = {
   prepublishOnly:
     "node -e \"assert.equal(require('.').version, require('..').version)\""
 };
+pkgWithoutDependencies.files = ["*.js"];
 pipe(JSON.stringify(pkgWithoutDependencies, null, 2)).to("dist/package.json");
 
 shell.echo("Copy README.md");

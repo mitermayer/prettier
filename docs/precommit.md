@@ -54,7 +54,7 @@ and add this config to your `package.json`:
 
 Find more info from [here](https://github.com/azz/pretty-quick).
 
-## Option 3. [pre-commit](https://github.com/pre-commit/pre-commit) (Python version)
+## Option 3. [pre-commit](https://github.com/pre-commit/pre-commit)
 
 **Use Case:** Great when working with multi-language projects.
 
@@ -67,7 +67,7 @@ Copy the following config into your `.pre-commit-config.yaml` file:
         -   id: prettier
 ```
 
-Find more info from [here](http://pre-commit.com).
+Find more info from [here](https://pre-commit.com).
 
 ## Option 4. [precise-commits](https://github.com/JamesHenry/precise-commits)
 
@@ -109,4 +109,13 @@ echo "$jsfiles" | xargs ./node_modules/.bin/prettier --write
 echo "$jsfiles" | xargs git add
 
 exit 0
+```
+
+If git is reporting that your prettified files are still modified after committing, you may need to add a post-commit script to update git's index as described in [this issue](https://github.com/prettier/prettier/issues/2978#issuecomment-334408427).
+
+Add something like the following to `.git/hooks/post-commit`:
+
+```bash
+#!/bin/sh
+git update-index -g
 ```

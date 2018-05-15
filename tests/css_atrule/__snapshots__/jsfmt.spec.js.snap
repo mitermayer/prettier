@@ -1016,7 +1016,85 @@ salamander
     (egret, white, move) {}
 @each $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var in puma, sea-slug, egret, salamander {}
 @each $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var, $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var1, $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var-2 in (puma, black, default), (sea-slug, blue, pointer), (egret, white, move) {}
+@each $element, $size in (h1: 20px, h2: 16px, h3: 14px) {}
+@each $element,$size in(h1:20px,h2:16px,h3:14px){}
+@each  $element  ,  $size  in  (  h1  :  20px  ,  h2  :  16px  ,  h3  :  14px  )  {}
+@each $element,
+    $size in (h1: 20px, h2: 16px, h3: 14px) {}
+@each
+    $element,
+    $size
+    in
+    (
+    h1
+    :
+    20px
+    ,
+    h2
+    :
+    16px
+    ,
+    h3
+    :
+    14px
+    )
+    {
+    }
+@each
+$element,
+$size
+in
+(
+h1
+:
+20px
+,
+h2
+:
+16px
+,
+h3
+:
+14px
+)
+{
+}
+@each
+$element,
 
+$size
+
+in
+
+(
+
+h1
+
+:
+
+20px
+
+,
+
+h2
+
+:
+
+16px
+
+,
+
+h3
+
+:
+
+14px
+
+)
+
+{
+
+}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @each $animal in puma, sea-slug, egret, salamander {
 }
@@ -1032,22 +1110,22 @@ salamander
 }
 @each $animal in puma, sea-slug, egret, salamander {
 }
-@each $animal in ((puma),  (sea-slug),  (egret),  (salamander)) {
+@each $animal in ((puma), (sea-slug), (egret), (salamander)) {
 }
 @each $animal in((puma), (sea-slug), (egret), (salamander)) {
 }
-@each $animal in ( (puma),  (sea-slug),  (egret),  (salamander)) {
+@each $animal in ((puma), (sea-slug), (egret), (salamander)) {
 }
-@each $animal in ((puma),  (sea-slug),  (egret),  (salamander)) {
+@each $animal in ((puma), (sea-slug), (egret), (salamander)) {
 }
-@each $animal in ( (puma),  (sea-slug),  (egret),  (salamander)) {
+@each $animal in ((puma), (sea-slug), (egret), (salamander)) {
 }
-@each $animal in ( (puma),  (sea-slug),  (egret),  (salamander)) {
+@each $animal in ((puma), (sea-slug), (egret), (salamander)) {
 }
-@each $animal in ( (puma),  (sea-slug),  (egret),  (salamander)) {
+@each $animal in ((puma), (sea-slug), (egret), (salamander)) {
 }
 @each $animal, $color, $cursor in (puma, black, default),
-   (sea-slug, blue, pointer),  (egret, white, move)
+  (sea-slug, blue, pointer), (egret, white, move)
 {
 }
 @each $animal, $color, $cursor in (puma, black, default),
@@ -1055,12 +1133,11 @@ salamander
 {
 }
 @each $animal, $color, $cursor in (puma, black, default),
-   (sea-slug, blue, pointer),  (egret, white, move)
+  (sea-slug, blue, pointer), (egret, white, move)
 {
 }
 @each $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var
-    in
-    puma,
+    in puma,
   sea-slug, egret, salamander
 {
 }
@@ -1068,8 +1145,22 @@ salamander
   $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var1,
   $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var-2
     in (puma, black, default),
-   (sea-slug, blue, pointer),  (egret, white, move)
+  (sea-slug, blue, pointer), (egret, white, move)
 {
+}
+@each $element, $size in (h1: 20px, h2: 16px, h3: 14px) {
+}
+@each $element, $size in(h1: 20px, h2: 16px, h3: 14px) {
+}
+@each $element, $size in (h1: 20px, h2: 16px, h3: 14px) {
+}
+@each $element, $size in (h1: 20px, h2: 16px, h3: 14px) {
+}
+@each $element, $size in (h1: 20px, h2: 16px, h3: 14px) {
+}
+@each $element, $size in (h1: 20px, h2: 16px, h3: 14px) {
+}
+@each $element, $size in (h1: 20px, h2: 16px, h3: 14px) {
 }
 
 `;
@@ -1580,6 +1671,7 @@ through
 @for $i from 1 through $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var-2 {}
 @for $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var from $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var1 through $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var-2 {}
 @for $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var from $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var1 end $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var-2 {}
+@for $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var from ($var1 + $var1) through ($var-2 + $var-2) {}
 @for $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var from ($very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var1 + $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var1) through ($very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var-2 + $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var-2) {}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @for $i from 1 through 8 {
@@ -1622,13 +1714,16 @@ through
 {
 }
 @for $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var
-  from
-  (
+  from ($var1 + $var1)
+  through ($var-2 + $var-2)
+{
+}
+@for $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var
+  from (
     $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var1 +
       $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var1
   )
-  through
-  (
+  through (
     $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var-2 +
       $very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-var-2
   )
@@ -1730,7 +1825,7 @@ $args
 @function func($arg, $arg1, $arg2: 10, $args...) {
   @return "Func";
 }
-@function func($arg, $arg1, $arg2:10, $args...) {
+@function func($arg, $arg1, $arg2: 10, $args...) {
   @return "Func";
 }
 @function func($arg, $arg1, $arg2: 10, $args...) {
@@ -1907,6 +2002,7 @@ p {
     @if $base-font-size != 16px or $base-line-height != 24px or $base-unit != 'em' or $h1-font-size != 2 * $base-font-size or $h2-font-size != 1.5 * $base-font-size or $h3-font-size != 1.17 * $base-font-size or $h4-font-size != 1 * $base-font-size or $h5-font-size != 0.83 * $base-font-size or $h6-font-size != 0.67 * $base-font-size or $indent-amount != 40px {}
     @if (str-slice($item, 0, 1) == ":") {}
     @if (str-slice($item, 0, 3) == " : ") {}
+    @if ($type == ocean) {} @else if ($type == matador) {} @else {}
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @if $media == phonePortrait {
@@ -1931,7 +2027,7 @@ p {
   }
   @if (($type) == (ocean)) {
   }
-  @if (($type)==(ocean)) {
+  @if (($type) ==(ocean)) {
   }
   @if (($type) == (ocean)) {
   }
@@ -2030,11 +2126,192 @@ p {
     40px
   {
   }
-  @if (str-slice($item, 0, 1) ==":") {
+  @if (str-slice($item, 0, 1) == ":") {
   }
   @if (str-slice($item, 0, 3) == " : ") {
   }
+  @if ($type == ocean) {
+  } @else if ($type == matador) {
+  } @else {
+  }
 }
+
+`;
+
+exports[`import.css 1`] = `
+@import url("fineprint.css") print;
+@import url("bluish.css") projection, tv;
+@import 'custom.css';
+@import url("chrome://communicator/skin/");
+@import "common.css" screen, projection;
+@import "common.css" screen projection;
+@import url('landscape.css') screen and (orientation:landscape);
+
+@import (multiple) "foo.less";
+
+/* This isn't valid CSS, SCSS or Less, but we should be lenient and make sure
+/* that nothing is lost when printing. */
+@import "one" two "three";
+
+#main {
+    @import "example";
+}
+#main {
+@import "example";
+}
+#main {
+    @import "example" ;
+}
+#main {
+    @import  "example"  ;
+}
+#main {
+    @import
+        "example";
+}
+#main
+{
+@import
+"example";
+}
+#main
+
+{
+
+@import
+
+"example";
+
+}
+
+@import "test.less" {}
+@import "test.less" {
+    a: b;
+    c: d;
+}
+
+@import url('foo');
+$dir: 'fonts';
+
+@import url("foo.css");
+@import url('foo.css');
+@import  url("foo.css");
+@import   url("foo.css");
+@import url("fineprint.css")print;
+@import url("fineprint.css") print;
+@import url("fineprint.css")  print;
+@import url("fineprint.css")
+  print;
+@import url("bluish.css") projection,tv;
+@import url("bluish.css") projection, tv;
+@import url("bluish.css") projection ,tv;
+@import url("bluish.css") projection , tv;
+@import url("bluish.css") projection  ,  tv;
+@import url("bluish.css")
+  projection,
+  tv;
+@import url("very-very-very-very-very-very-very-very-very-very-long-name.css") projection,tv;
+@import url("very-very-very-very-very-very-very-very-very-very-long-name.css") projection tv;
+@import url('landscape.css') screen and (orientation:landscape);
+@import "rounded-corners", "text-shadow";
+@import 'rounded-corners', 'text-shadow';
+$family: unquote("Droid+Sans");
+@import url("http://fonts.googleapis.com/css?family=#{$family}");
+@import url( "foo.css");
+@import url("foo.css" );
+@import url( "foo.css" );
+@import url(  "foo.css"  );
+@import url("foo bar baz.css");
+@import url(  "foo bar baz.css"  );
+@import url("foo  bar  baz.css");
+@import url(
+"foo.css"
+);
+@import 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600';
+@import url(
+"foo.css,800"
+);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+@import url("fineprint.css") print;
+@import url("bluish.css") projection, tv;
+@import "custom.css";
+@import url("chrome://communicator/skin/");
+@import "common.css" screen, projection;
+@import "common.css" screen projection;
+@import url("landscape.css") screen and (orientation: landscape);
+
+@import (multiple) "foo.less";
+
+/* This isn't valid CSS, SCSS or Less, but we should be lenient and make sure
+/* that nothing is lost when printing. */
+@import "one" two "three";
+
+#main {
+  @import "example";
+}
+#main {
+  @import "example";
+}
+#main {
+  @import "example";
+}
+#main {
+  @import "example";
+}
+#main {
+  @import "example";
+}
+#main {
+  @import "example";
+}
+#main {
+  @import "example";
+}
+
+@import "test.less" {
+}
+@import "test.less" {
+  a: b;
+  c: d;
+}
+
+@import url("foo");
+$dir: "fonts";
+
+@import url("foo.css");
+@import url("foo.css");
+@import url("foo.css");
+@import url("foo.css");
+@import url("fineprint.css") print;
+@import url("fineprint.css") print;
+@import url("fineprint.css") print;
+@import url("fineprint.css") print;
+@import url("bluish.css") projection, tv;
+@import url("bluish.css") projection, tv;
+@import url("bluish.css") projection, tv;
+@import url("bluish.css") projection, tv;
+@import url("bluish.css") projection, tv;
+@import url("bluish.css") projection, tv;
+@import url("very-very-very-very-very-very-very-very-very-very-long-name.css")
+  projection,
+  tv;
+@import url("very-very-very-very-very-very-very-very-very-very-long-name.css")
+  projection tv;
+@import url("landscape.css") screen and (orientation: landscape);
+@import "rounded-corners", "text-shadow";
+@import "rounded-corners", "text-shadow";
+$family: unquote("Droid+Sans");
+@import url("http://fonts.googleapis.com/css?family=#{$family}");
+@import url("foo.css");
+@import url("foo.css");
+@import url("foo.css");
+@import url("foo.css");
+@import url("foo bar baz.css");
+@import url("foo bar baz.css");
+@import url("foo  bar  baz.css");
+@import url("foo.css");
+@import "https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600";
+@import url("foo.css,800");
 
 `;
 
@@ -2125,7 +2402,7 @@ a {
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @include mix(1px, 2px, $arg2: 10, 2px 4px 6px);
-@include mix(1px, 2px, $arg2:10, 2px 4px 6px);
+@include mix(1px, 2px, $arg2: 10, 2px 4px 6px);
 @include mix(1px, 2px, $arg2: 10, 2px 4px 6px);
 @include mix(1px, 2px, $arg2: 10, 2px 4px 6px);
 @include mix(1px, 2px, $arg2: 10, 2px 4px 6px);
@@ -2539,6 +2816,331 @@ margin-top: 100px;
 
 `;
 
+exports[`media.css 1`] = `
+@media screen and (min-width: 480px) {}
+@media  screen and (min-width: 480px) {}
+@MEDIA screen and (min-width: 480px) {}
+@MEDIA screen  and (min-width: 480px) {}
+@media screen and  (min-width: 480px) {}
+@media screen and (min-width: 480px) {}
+@media screen and (min-width :480px) {}
+@media screen and (min-width : 480px) {}
+@media screen and (min-width  :  480px) {}
+@media
+  screen
+  and
+  (min-width
+  :
+  480px) {}
+@media screen and ( min-width: 480px) {}
+@media screen and (min-width: 480px ) {}
+@media screen and ( min-width: 480px ) {}
+@media screen and (  min-width:  480px  ) {}
+@media not screen and (color), print and (color) { }
+@media not screen and (color) , print and (color) { }
+@media not screen and (color),print and (color) { }
+@media not screen and (color) , print and (color) { }
+@media not screen and (color)  ,  print and (color) { }
+@media not screen and ( color), print and (color) { }
+@media not screen and (color ), print and (color) { }
+@media not screen and ( color ), print and (color) { }
+@media not screen and (  color  ), print and (color) { }
+@media (--small-viewport) {}
+@media
+(
+--small-viewport
+)
+{
+}
+@media
+
+(
+
+--small-viewport
+
+)
+
+{
+
+}
+
+.screen-color {
+    @media screen {
+        color: green;
+
+        @media (min-width: 768px) {
+            color: red;
+        }
+    }
+    @media tv {
+        color: black;
+    }
+}
+.screen-color {
+@media screen {
+color: green;
+
+@media (min-width: 768px) {
+color: red;
+}
+}
+@media tv {
+color: black;
+}
+}
+.screen-color{
+    @media screen{
+        color: green;
+
+        @media (min-width: 768px){
+            color: red;
+        }
+    }
+    @media tv{
+        color: black;
+    }
+}
+.screen-color  {
+    @media screen  {
+        color: green;
+
+        @media (min-width: 768px)  {
+            color: red;
+        }
+    }
+    @media tv  {
+        color: black;
+    }
+}
+.screen-color
+{
+@media
+screen
+{
+color
+:
+green
+;
+@media
+(
+min-width
+:
+768px
+)
+{
+color
+:
+red
+;
+}
+}
+@media
+tv
+{
+color
+:
+black
+;
+}
+}
+.screen-color
+
+{
+
+@media
+
+screen
+
+{
+
+color
+
+:
+
+green
+
+;
+
+@media
+
+(
+
+min-width
+
+:
+
+768px
+
+)
+
+{
+
+color
+
+:
+
+red
+
+;
+
+}
+
+}
+
+@media
+
+tv
+
+{
+
+color
+
+:
+
+black
+
+;
+
+}
+
+}
+
+@media all and (-webkit-min-device-pixel-ratio: 1.5), all and (-o-min-device-pixel-ratio: 3/2), all and (min--moz-device-pixel-ratio: 1.5), all and (min-device-pixel-ratio: 1.5) {}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+@media screen and (min-width: 480px) {
+}
+@media screen and (min-width: 480px) {
+}
+@media screen and (min-width: 480px) {
+}
+@media screen and (min-width: 480px) {
+}
+@media screen and (min-width: 480px) {
+}
+@media screen and (min-width: 480px) {
+}
+@media screen and (min-width: 480px) {
+}
+@media screen and (min-width: 480px) {
+}
+@media screen and (min-width: 480px) {
+}
+@media screen and (min-width: 480px) {
+}
+@media screen and (min-width: 480px) {
+}
+@media screen and (min-width: 480px) {
+}
+@media screen and (min-width: 480px) {
+}
+@media screen and (min-width: 480px) {
+}
+@media not screen and (color), print and (color) {
+}
+@media not screen and (color), print and (color) {
+}
+@media not screen and (color), print and (color) {
+}
+@media not screen and (color), print and (color) {
+}
+@media not screen and (color), print and (color) {
+}
+@media not screen and (color), print and (color) {
+}
+@media not screen and (color), print and (color) {
+}
+@media not screen and (color), print and (color) {
+}
+@media not screen and (color), print and (color) {
+}
+@media (--small-viewport) {
+}
+@media (--small-viewport) {
+}
+@media (--small-viewport) {
+}
+
+.screen-color {
+  @media screen {
+    color: green;
+
+    @media (min-width: 768px) {
+      color: red;
+    }
+  }
+  @media tv {
+    color: black;
+  }
+}
+.screen-color {
+  @media screen {
+    color: green;
+
+    @media (min-width: 768px) {
+      color: red;
+    }
+  }
+  @media tv {
+    color: black;
+  }
+}
+.screen-color {
+  @media screen {
+    color: green;
+
+    @media (min-width: 768px) {
+      color: red;
+    }
+  }
+  @media tv {
+    color: black;
+  }
+}
+.screen-color {
+  @media screen {
+    color: green;
+
+    @media (min-width: 768px) {
+      color: red;
+    }
+  }
+  @media tv {
+    color: black;
+  }
+}
+.screen-color {
+  @media screen {
+    color: green;
+    @media (min-width: 768px) {
+      color: red;
+    }
+  }
+  @media tv {
+    color: black;
+  }
+}
+.screen-color {
+  @media screen {
+    color: green;
+
+    @media (min-width: 768px) {
+      color: red;
+    }
+  }
+
+  @media tv {
+    color: black;
+  }
+}
+
+@media all and (-webkit-min-device-pixel-ratio: 1.5),
+  all and (-o-min-device-pixel-ratio: 3/2),
+  all and (min--moz-device-pixel-ratio: 1.5),
+  all and (min-device-pixel-ratio: 1.5) {
+}
+
+`;
+
 exports[`mixin.css 1`] = `
 @mixin clearfix {}
 @mixin clearfix{}
@@ -2624,6 +3226,29 @@ $args
 {
 }
 @mixin mix($very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-arg, $very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-arg1, $very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-arg2: 10, $very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-args...) {}
+@mixin component($conf: ()) {}
+@mixin component($conf: ( )) {}
+@mixin button-variant($hover-background: darken($background, 7.5%)) {}
+@mixin button-variant( $hover-background : darken( $background , 7.5% ) ) {}
+@mixin button-variant($hover-background:darken($background,7.5%)) {}
+@mixin button-variant(
+    $hover-background: darken($background, 7.5%)
+) {}
+@mixin
+button-variant(
+$hover-background
+:
+darken(
+$background
+,
+7.5%
+)
+)
+{}
+@mixin button-variant($foo: "...") {}
+@mixin button-variant($foo: " ... ") {}
+@mixin button-variant($foo: "  ...  ") {}
+@mixin sexy-border($color, $width, $foo: (color: red)) {}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @mixin clearfix {
 }
@@ -2642,7 +3267,7 @@ $args
 
 @mixin mix($arg, $arg1, $arg2: 10, $args...) {
 }
-@mixin mix($arg, $arg1, $arg2:10, $args...) {
+@mixin mix($arg, $arg1, $arg2: 10, $args...) {
 }
 @mixin mix($arg, $arg1, $arg2: 10, $args...) {
 }
@@ -2663,6 +3288,28 @@ $args
     10,
   $very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-args...
 ) {
+}
+@mixin component($conf: ()) {
+}
+@mixin component($conf: ()) {
+}
+@mixin button-variant($hover-background: darken($background, 7.5%)) {
+}
+@mixin button-variant($hover-background: darken($background, 7.5%)) {
+}
+@mixin button-variant($hover-background: darken($background, 7.5%)) {
+}
+@mixin button-variant($hover-background: darken($background, 7.5%)) {
+}
+@mixin button-variant($hover-background: darken($background, 7.5%)) {
+}
+@mixin button-variant($foo: "...") {
+}
+@mixin button-variant($foo: " ... ") {
+}
+@mixin button-variant($foo: "  ...  ") {
+}
+@mixin sexy-border($color, $width, $foo: (color: red)) {
 }
 
 `;
@@ -2847,19 +3494,19 @@ margin
 
 exports[`return.css 1`] = `
 @function grid-width($n) {
-    @return $n * $grid-width + ($n - 1) * $gutter-width;
+    @return $n * $grid-width + ($n - 1) * $gutter-width / 10;
 }
 @function grid-width($n) {
-@return $n * $grid-width + ($n - 1) * $gutter-width;
+@return $n * $grid-width + ($n - 1) * $gutter-width / 10;
 }
 @function grid-width($n) {
-@return $n*$grid-width+($n-1)*$gutter-width;
+@return $n*$grid-width+($n-1)*$gutter-width/10;
 }
 @function grid-width($n) {
-    @return $n * $grid-width + ( $n - 1 ) * $gutter-width ;
+    @return $n * $grid-width + ( $n - 1 ) * $gutter-width / 10 ;
 }
 @function grid-width($n) {
-    @return  $n   *  $grid-width  +  (  $n  -  1  )  *  $gutter-width  ;
+    @return  $n   *  $grid-width  +  (  $n  -  1  )  *  $gutter-width  /  10  ;
 }
 @function grid-width($n) {
     @return $n
@@ -2871,7 +3518,10 @@ exports[`return.css 1`] = `
             1
         )
         *
-        $gutter-width;
+        $gutter-width
+        /
+        10
+        ;
 }
 @function grid-width($n) {
     @return
@@ -2884,7 +3534,10 @@ exports[`return.css 1`] = `
             1
         )
         *
-        $gutter-width;
+        $gutter-width
+        /
+        10
+        ;
 }
 @function
 grid-width(
@@ -2903,6 +3556,8 @@ $n
 )
 *
 $gutter-width
+/
+10
 ;
 }
 @function
@@ -2938,6 +3593,10 @@ $n
 *
 
 $gutter-width
+
+/
+
+10
 
 ;
 
@@ -2945,40 +3604,69 @@ $gutter-width
 @function grid-width($n) {
     @return $very-very-very-very-very-very-vey-long-var * $very-very-very-very-very-very-vey-long-var + ($very-very-very-very-very-very-vey-long-var - 1) * $very-very-very-very-very-very-vey-long-var;
 }
+@function extend($obj, $ext-obj) {
+    @return map-merge($obj, $ext-obj);
+}
+@function extend($obj, $ext-obj) {
+    @return map-merge( $obj , $ext-obj ) ;
+}
+@function extend($obj, $ext-obj) {
+    @return map-merge($obj,$ext-obj);
+}
+@function extend($obj, $ext-obj) {
+    @return
+    map-merge(
+    $obj
+    ,
+    $ext-obj
+    )
+    ;
+}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @function grid-width($n) {
-  @return $n * $grid-width + ($n - 1) * $gutter-width;
+  @return $n * $grid-width + ($n - 1) * $gutter-width / 10;
 }
 @function grid-width($n) {
-  @return $n * $grid-width + ($n - 1) * $gutter-width;
+  @return $n * $grid-width + ($n - 1) * $gutter-width / 10;
 }
 @function grid-width($n) {
-  @return $n*$grid-width+($n-1)*$gutter-width;
+  @return $n * $grid-width + ($n-1) * $gutter-width/10;
 }
 @function grid-width($n) {
-  @return $n * $grid-width + ($n - 1) * $gutter-width;
+  @return $n * $grid-width + ($n - 1) * $gutter-width / 10;
 }
 @function grid-width($n) {
-  @return $n * $grid-width + ($n - 1) * $gutter-width;
+  @return $n * $grid-width + ($n - 1) * $gutter-width / 10;
 }
 @function grid-width($n) {
-  @return $n * $grid-width + ($n - 1) * $gutter-width;
+  @return $n * $grid-width + ($n - 1) * $gutter-width / 10;
 }
 @function grid-width($n) {
-  @return $n * $grid-width + ($n - 1) * $gutter-width;
+  @return $n * $grid-width + ($n - 1) * $gutter-width / 10;
 }
 @function grid-width($n) {
-  @return $n * $grid-width + ($n - 1) * $gutter-width;
+  @return $n * $grid-width + ($n - 1) * $gutter-width / 10;
 }
 @function grid-width($n) {
-  @return $n * $grid-width + ($n - 1) * $gutter-width;
+  @return $n * $grid-width + ($n - 1) * $gutter-width / 10;
 }
 @function grid-width($n) {
   @return $very-very-very-very-very-very-vey-long-var *
     $very-very-very-very-very-very-vey-long-var +
-    (
-      $very-very-very-very-very-very-vey-long-var - 1
-    ) * $very-very-very-very-very-very-vey-long-var;
+    ($very-very-very-very-very-very-vey-long-var - 1) *
+    $very-very-very-very-very-very-vey-long-var;
+}
+@function extend($obj, $ext-obj) {
+  @return map-merge($obj, $ext-obj);
+}
+@function extend($obj, $ext-obj) {
+  @return map-merge($obj, $ext-obj);
+}
+@function extend($obj, $ext-obj) {
+  @return map-merge($obj, $ext-obj);
+}
+@function extend($obj, $ext-obj) {
+  @return map-merge($obj, $ext-obj);
 }
 
 `;
@@ -3264,6 +3952,9 @@ run-in
 @supports (transform-style: preserve) or (-moz-transform-style: preserve) {}
 @supports (transform-style: preserve) or (-moz-transform-style: preserve) or (-o-transform-style: preserve) or (-webkit-transform-style: preserve) {}
 @supports (transform-style: preserve-3d) or ((-moz-transform-style: preserve-3d) or ((-o-transform-style: preserve-3d) or (-webkit-transform-style: preserve-3d))) {}
+@supports not((text-align-last:justify)or(-moz-text-align-last:justify)){ }
+@supports not((text-align-last:justify)and(-moz-text-align-last:justify)){ }
+@supports (--foo:green) {}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @supports (transform-origin: 5% 5%) {
 }
@@ -3271,85 +3962,94 @@ run-in
 }
 @supports (transform-origin: 5% 5%) {
 }
-@supports (transform-origin: 5%  5%) {
+@supports (transform-origin: 5% 5%) {
+}
+@supports (transform-origin: 5% 5%) {
 }
 @supports (transform-origin: 5% 5%) {
 }
 @supports (transform-origin: 5% 5%) {
 }
-@supports (transform-origin: 5%
-5%) {
+@supports (transform-origin: 5% 5%) {
 }
-@supports (transform-origin: 5%
-
-5%) {
+@supports (
+  very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-prop:
+    very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-value
+) {
 }
-@supports (very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-prop: very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-value) {
+@supports (
+  very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-prop:
+    very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-value
+) {
 }
-@supports (very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-prop: very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-value) {
+@supports (
+  very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-prop:
+    very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-value
+) {
 }
-@supports (very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-prop: very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-value) {
-}
-@supports (very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-prop: very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-value) {
-}
-@supports not(transform-origin: 10em 10em 10em) {
-}
-@supports not (transform-origin: 10em 10em 10em) {
-}
-@supports not (transform-origin: 10em 10em 10em) {
-}
-@supports not (transform-origin: 10em  10em  10em) {
-}
-@supports not (transform-origin: 10em 10em 10em) {
+@supports (
+  very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-prop:
+    very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-value
+) {
 }
 @supports not (transform-origin: 10em 10em 10em) {
 }
 @supports not (transform-origin: 10em 10em 10em) {
 }
-@supports not (transform-origin: 10em
-10em
-10em) {
+@supports not (transform-origin: 10em 10em 10em) {
 }
-@supports not (transform-origin: 10em
-
-10em
-
-10em) {
+@supports not (transform-origin: 10em 10em 10em) {
 }
-@supports not (very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-prop: very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-value) {
+@supports not (transform-origin: 10em 10em 10em) {
 }
-@supports not (very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-prop: very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-value) {
+@supports not (transform-origin: 10em 10em 10em) {
 }
-@supports not (very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-prop: very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-value) {
+@supports not (transform-origin: 10em 10em 10em) {
 }
-@supports not (very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-prop: very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-value) {
+@supports not (transform-origin: 10em 10em 10em) {
 }
-@supports not (very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-prop: very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-value) {
+@supports not (transform-origin: 10em 10em 10em) {
+}
+@supports not (
+  very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-prop:
+    very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-value
+) {
+}
+@supports not (
+  very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-prop:
+    very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-value
+) {
+}
+@supports not (
+  very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-prop:
+    very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-value
+) {
+}
+@supports not (
+  very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-prop:
+    very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-value
+) {
+}
+@supports not (
+  very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-prop:
+    very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long-value
+) {
 }
 @supports not (not (transform-origin: 2px)) {
 }
-@supports not(not(transform-origin:2px)) {
+@supports not (not (transform-origin: 2px)) {
 }
-@supports not (not ( transform-origin: 2px )) {
-}
-@supports not (not ( transform-origin: 2px  )) {
+@supports not (not (transform-origin: 2px)) {
 }
 @supports not (not (transform-origin: 2px)) {
 }
 @supports not (not (transform-origin: 2px)) {
 }
-@supports not (not
-(
-transform-origin: 2px
-)) {
+@supports not (not (transform-origin: 2px)) {
 }
-@supports not (not
-
-(
-
-transform-origin: 2px
-
-)) {
+@supports not (not (transform-origin: 2px)) {
+}
+@supports not (not (transform-origin: 2px)) {
 }
 @supports (display: flexbox) and (not (display: inline-grid)) {
 }
@@ -3375,45 +4075,33 @@ transform-origin: 2px
 }
 @supports (display: table-cell) and ((display: list-item) and (display: run-in)) {
 }
-@supports (display: table-cell) and ((display: list-item)
-  and (display: run-in)) {
+@supports (display: table-cell) and ((display: list-item) and (display: run-in)) {
 }
-@supports (display: table-cell) and ((display: list-item) and
-  (display: run-in)) {
+@supports (display: table-cell) and ((display: list-item) and (display: run-in)) {
 }
-@supports (display: table-cell) and ((
-display: list-item
-)
-and
-(
-display
-:
-run-in
-)) {
+@supports (display: table-cell) and ((display: list-item) and (display: run-in)) {
 }
-@supports (display: table-cell) and ((
-
-display: list-item
-
-)
-
-and
-
-(
-
-display
-
-:
-
-run-in
-
-)) {
+@supports (display: table-cell) and ((display: list-item) and (display: run-in)) {
 }
 @supports (transform-style: preserve) or (-moz-transform-style: preserve) {
 }
-@supports (transform-style: preserve) or (-moz-transform-style: preserve) or (-o-transform-style: preserve) or (-webkit-transform-style: preserve) {
+@supports (transform-style: preserve) or (-moz-transform-style: preserve) or
+  (-o-transform-style: preserve) or (-webkit-transform-style: preserve) {
 }
-@supports (transform-style: preserve-3d) or ((-moz-transform-style: preserve-3d) or ((-o-transform-style: preserve-3d) or (-webkit-transform-style: preserve-3d))) {
+@supports (transform-style: preserve-3d) or
+  (
+    (-moz-transform-style: preserve-3d) or
+      (
+        (-o-transform-style: preserve-3d) or
+          (-webkit-transform-style: preserve-3d)
+      )
+  ) {
+}
+@supports not ((text-align-last: justify) or (-moz-text-align-last: justify)) {
+}
+@supports not ((text-align-last: justify) and (-moz-text-align-last: justify)) {
+}
+@supports (--foo: green) {
 }
 
 `;
@@ -3662,7 +4350,7 @@ $i
 }
 @while (($i) > (0)) {
 }
-@while (($i)>(0)) {
+@while (($i) >(0)) {
 }
 @while (($i) > (0)) {
 }

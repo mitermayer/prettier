@@ -118,21 +118,45 @@ exports[`concat-statement.hbs 1`] = `
 </div>
 
 <a href="/{{url}}/{{url}}"></a>
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-<div class="hello{{if goodbye true}}">
+
+<div class="  class-a{{myClass}}"></div>
+<div class=" class-b {{myClass}}"></div>
+<div class="    {{myClass}}class-c"></div>
+<div class="  {{myClass}}   class-d"></div>
+<div class=" class-e{{myClass}}    class-f"></div>
+<div class="     class-g{{myClass}}class-h    "></div>
+<div class=" class-i       {{myClass}}class-j"></div>
+<div class="class-k {{myClass}}   class-l"></div>
+<div class="  class-m   {{myClass}}     class-n {{myClass}}class-o   "></div>
+<div class="  class-p  class-q"></div>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<div class="hello {{if goodbye true}}">
   Hello
 </div>
 <div
   class="hello
     {{if goodbye true}}
+
     {{if goodbye false}}
+
     {{if goodbye true}}
+
     {{if goodbye false}}
+
     {{if goodbye true}}"
 >
   Hello
 </div>
 <a href="/{{url}}/{{url}}"></a>
+<div class="class-a{{myClass}}"></div>
+<div class="class-b {{myClass}}"></div>
+<div class="{{myClass}}class-c"></div>
+<div class="{{myClass}} class-d"></div>
+<div class="class-e{{myClass}} class-f"></div>
+<div class="class-g{{myClass}}class-h"></div>
+<div class="class-i {{myClass}}class-j"></div>
+<div class="class-k {{myClass}} class-l"></div>
+<div class="class-m {{myClass}} class-n {{myClass}}class-o"></div>
+<div class="class-p  class-q"></div>
 `;
 
 exports[`element-modifier-statement.hbs 1`] = `
@@ -321,7 +345,22 @@ exports[`else-if.hbs 1`] = `
     {{/if}}
   </div>
 </div>
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+{{#if a}}
+  b
+{{else}}
+  {{#each c as |d|}}
+    e
+  {{/each}}
+{{/if}}
+
+{{#if a}}
+  {{#if b}}
+    ab
+  {{else if c}}
+    ac
+  {{/if}}
+{{/if}}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {{#if a}}
   b
 {{else if c}}
@@ -371,6 +410,20 @@ exports[`else-if.hbs 1`] = `
     {{/if}}
   </div>
 </div>
+{{#if a}}
+  b
+{{else}}
+  {{#each c as |d|}}
+    e
+  {{/each}}
+{{/if}}
+{{#if a}}
+  {{#if b}}
+    ab
+  {{else if c}}
+    ac
+  {{/if}}
+{{/if}}
 `;
 
 exports[`literals.hbs 1`] = `

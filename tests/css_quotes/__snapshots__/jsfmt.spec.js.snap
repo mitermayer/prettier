@@ -161,8 +161,8 @@ one 'two' three {}
     content: 'var backslash = "\\\\", doubleQuote = \\'"\\';';
 
     /* Leave all "escapes" alone. */
-    content: "\\Abc4 foo \\n" "\\end";
-    content: "\\Abc4 foo \\n" "\\end";
+    content: "\\Abc4 foo \\n" /* "comment" */ "\\end";
+    content: "\\Abc4 foo \\n" /* 'comment' */ "\\end";
   }
 }
 
@@ -176,11 +176,11 @@ one 'two' three {}
 @import "foo.css" screen and (orientation: landscape);
 
 @foo "one";
-@foo "one";
-@foo "one" two "three";
+@foo 'one';
+@foo "one" two 'three';
 @foo ("one");
-@foo ("one");
-@foo ("one" two "three");
+@foo ('one');
+@foo ("one" two 'three');
 
 one "two" three {
 }
@@ -350,8 +350,8 @@ one 'two' three {}
     content: 'var backslash = "\\\\", doubleQuote = \\'"\\';';
 
     /* Leave all "escapes" alone. */
-    content: '\\Abc4 foo \\n' '\\end';
-    content: '\\Abc4 foo \\n' '\\end';
+    content: '\\Abc4 foo \\n' /* "comment" */ '\\end';
+    content: '\\Abc4 foo \\n' /* 'comment' */ '\\end';
   }
 }
 
@@ -364,12 +364,12 @@ one 'two' three {}
 @import 'foo.css' screen and (orientation: landscape);
 @import 'foo.css' screen and (orientation: landscape);
 
+@foo "one";
 @foo 'one';
-@foo 'one';
-@foo 'one' two 'three';
+@foo "one" two 'three';
+@foo ("one");
 @foo ('one');
-@foo ('one');
-@foo ('one' two 'three');
+@foo ("one" two 'three');
 
 one 'two' three {
 }

@@ -1,27 +1,38 @@
 "use strict";
 
-// const createError = require("./parser-create-error");
-
 function parse(text /*, parsers, opts*/) {
   // Inline the require to avoid loading all the JS if we don't use it
   const parse5 = require("parse5");
   try {
-    const isFragment = !/^\s*<(!doctype|html|head|body)/i.test(text);
+    const isFragment = !/^\s*<(!doctype|html|head|body|!--)/i.test(text);
     const ast = (isFragment ? parse5.parseFragment : parse5.parse)(text, {
       treeAdapter: parse5.treeAdapters.htmlparser2,
       locationInfo: true
     });
-    return extendAst(ast);
+    return normalize(extendAst(ast));
   } catch (error) {
-    //   throw createError(error.message, {
-    //     start: {
-    //       line: error.locations[0].line,
-    //       column: error.locations[0].column
-    //     }
-    // } else {
     throw error;
-    // }
   }
+}
+
+function normalize(ast) {
+  if (Array.isArray(ast)) {
+    return ast.map(normalize);
+  }
+
+  if (!ast || typeof ast !== "object") {
+    return ast;
+  }
+
+  delete ast.parent;
+  delete ast.next;
+  delete ast.prev;
+
+  for (const key of Object.keys(ast)) {
+    ast[key] = normalize(ast[key]);
+  }
+
+  return ast;
 }
 
 function extendAst(ast) {

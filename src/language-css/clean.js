@@ -1,6 +1,14 @@
 "use strict";
 
+const htmlTagNames = require("html-tag-names");
+
 function clean(ast, newObj) {
+  ["raws", "sourceIndex", "source", "before", "after", "trailingComma"].forEach(
+    name => {
+      delete newObj[name];
+    }
+  );
+
   if (
     ast.type === "media-query" ||
     ast.type === "media-query-list" ||
@@ -50,7 +58,6 @@ function clean(ast, newObj) {
       ast.type === "media-unknown" ||
       ast.type === "media-url" ||
       ast.type === "media-value" ||
-      ast.type === "selector-root-invalid" ||
       ast.type === "selector-attribute" ||
       ast.type === "selector-string" ||
       ast.type === "selector-class" ||
@@ -107,6 +114,28 @@ function clean(ast, newObj) {
     newObj.value = newObj.value
       .replace(/^url\(\s+/gi, "url(")
       .replace(/\s+\)$/gi, ")");
+  }
+
+  if (ast.type === "selector-tag") {
+    const lowercasedValue = ast.value.toLowerCase();
+
+    if (htmlTagNames.indexOf(lowercasedValue) !== -1) {
+      newObj.value = lowercasedValue;
+    }
+
+    if (["from", "to"].indexOf(lowercasedValue) !== -1) {
+      newObj.value = lowercasedValue;
+    }
+  }
+
+  // Workaround when `postcss-values-parser` parse `not`, `and` or `or` keywords as `value-func`
+  if (ast.type === "css-atrule" && ast.name.toLowerCase() === "supports") {
+    delete newObj.value;
+  }
+
+  // Workaround for SCSS nested properties
+  if (ast.type === "selector-unknown") {
+    delete newObj.value;
   }
 }
 

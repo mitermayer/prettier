@@ -17,7 +17,7 @@ function pipe(string) {
 }
 
 const isPullRequest = process.env.PULL_REQUEST === "true";
-const prettierPath = isPullRequest ? "dist" : "node_modules/prettier/";
+const prettierPath = isPullRequest ? "dist" : "node_modules/prettier";
 
 const parserPaths = parsers.map(stripLanguageDirectory);
 
@@ -63,13 +63,11 @@ for (const parser of parserPaths) {
   );
 }
 
-shell.echo("Copy sw-toolbox.js to docs");
-shell.cp("node_modules/sw-toolbox/sw-toolbox.js", `${docs}/sw-toolbox.js`);
-
 // --- Site ---
 shell.cd("website");
 shell.echo("Building website...");
 shell.exec("yarn install");
+
 shell.exec("yarn build");
 
 shell.echo();

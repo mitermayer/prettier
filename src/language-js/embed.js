@@ -1,6 +1,5 @@
 "use strict";
 
-const util = require("../common/util");
 const doc = require("../doc");
 const docUtils = doc.utils;
 const docBuilders = doc.builders;
@@ -26,7 +25,16 @@ function embed(path, print, textToDoc /*, options */) {
       if (isCss) {
         // Get full template literal with expressions replaced by placeholders
         const rawQuasis = node.quasis.map(q => q.value.raw);
-        const text = rawQuasis.join("@prettier-placeholder");
+        let placeholderID = 0;
+        const text = rawQuasis.reduce((prevVal, currVal, idx) => {
+          return idx == 0
+            ? currVal
+            : prevVal +
+                "@prettier-placeholder-" +
+                placeholderID++ +
+                "-id" +
+                currVal;
+        }, "");
         const doc = textToDoc(text, { parser: "css" });
         return transformCssDoc(doc, path, print);
       }
@@ -40,18 +48,7 @@ function embed(path, print, textToDoc /*, options */) {
        * This intentionally excludes Relay Classic tags, as Prettier does not
        * support Relay Classic formatting.
        */
-      if (
-        parent &&
-        ((parent.type === "TaggedTemplateExpression" &&
-          ((parent.tag.type === "MemberExpression" &&
-            parent.tag.object.name === "graphql" &&
-            parent.tag.property.name === "experimental") ||
-            (parent.tag.type === "Identifier" &&
-              (parent.tag.name === "gql" || parent.tag.name === "graphql")))) ||
-          (parent.type === "CallExpression" &&
-            parent.callee.type === "Identifier" &&
-            parent.callee.name === "graphql"))
-      ) {
+      if (isGraphQL(path)) {
         const expressionDocs = node.expressions
           ? path.map(print, "expressions")
           : [];
@@ -68,7 +65,14 @@ function embed(path, print, textToDoc /*, options */) {
           const templateElement = node.quasis[i];
           const isFirst = i === 0;
           const isLast = i === numQuasis - 1;
-          const text = templateElement.value.raw;
+          const text = templateElement.value.cooked;
+
+          // Bail out if any of the quasis have an invalid escape sequence
+          // (which would make the `cooked` value be `null` or `undefined`)
+          if (typeof text !== "string") {
+            return null;
+          }
+
           const lines = text.split("\n");
           const numLines = lines.length;
           const expressionDoc = expressionDocs[i];
@@ -98,13 +102,17 @@ function embed(path, print, textToDoc /*, options */) {
               doc = docUtils.stripTrailingHardline(
                 textToDoc(text, { parser: "graphql" })
               );
-            } catch (_error) {
+            } catch (error) {
+              if (process.env.PRETTIER_DEBUG) {
+                throw error;
+              }
               // Bail if any part fails to parse.
               return null;
             }
           }
 
           if (doc) {
+            doc = escapeBackticks(doc);
             if (!isFirst && startsWithBlankLine) {
               parts.push("");
             }
@@ -145,7 +153,10 @@ function embed(path, print, textToDoc /*, options */) {
             (parentParent.tag.name === "md" ||
               parentParent.tag.name === "markdown")))
       ) {
-        const text = parent.quasis[0].value.cooked;
+        const text = parent.quasis[0].value.raw.replace(
+          /((?:\\\\)*)\\`/g,
+          (_, backslashes) => "\\".repeat(backslashes.length / 2) + "`"
+        );
         const indentation = getIndentation(text);
         const hasIndent = indentation !== "";
         return concat([
@@ -179,7 +190,7 @@ function getIndentation(str) {
 }
 
 function escapeBackticks(doc) {
-  return util.mapDoc(doc, currentDoc => {
+  return docUtils.mapDoc(doc, currentDoc => {
     if (!currentDoc.parts) {
       return currentDoc;
     }
@@ -188,7 +199,7 @@ function escapeBackticks(doc) {
 
     currentDoc.parts.forEach(part => {
       if (typeof part === "string") {
-        parts.push(part.replace(/`/g, "\\`"));
+        parts.push(part.replace(/(\\*)`/g, "$1$1\\`"));
       } else {
         parts.push(part);
       }
@@ -233,6 +244,7 @@ function replacePlaceholders(quasisDoc, expressionDocs) {
   }
 
   const expressions = expressionDocs.slice();
+  let replaceCounter = 0;
   const newDoc = docUtils.mapDoc(quasisDoc, doc => {
     if (!doc || !doc.parts || !doc.parts.length) {
       return doc;
@@ -261,12 +273,16 @@ function replacePlaceholders(quasisDoc, expressionDocs) {
     if (atPlaceholderIndex > -1) {
       const placeholder = parts[atPlaceholderIndex];
       const rest = parts.slice(atPlaceholderIndex + 1);
-
+      const placeholderMatch = placeholder.match(
+        /@prettier-placeholder-(.+)-id([\s\S]*)/
+      );
+      const placeholderID = placeholderMatch[1];
       // When the expression has a suffix appended, like:
       // animation: linear ${time}s ease-out;
-      const suffix = placeholder.slice("@prettier-placeholder".length);
+      const suffix = placeholderMatch[2];
+      const expression = expressions[placeholderID];
 
-      const expression = expressions.shift();
+      replaceCounter++;
       parts = parts
         .slice(0, atPlaceholderIndex)
         .concat(["${", expression, "}" + suffix])
@@ -277,7 +293,7 @@ function replacePlaceholders(quasisDoc, expressionDocs) {
     });
   });
 
-  return expressions.length === 0 ? newDoc : null;
+  return expressions.length === replaceCounter ? newDoc : null;
 }
 
 function printGraphqlComments(lines) {
@@ -344,7 +360,7 @@ function isStyledComponents(path) {
         // styled.foo``
         isStyledIdentifier(tag.object) ||
         // Component.extend``
-        (/^[A-Z]/.test(tag.object.name) && tag.property.name === "extend")
+        isStyledExtend(tag)
       );
 
     case "CallExpression":
@@ -352,9 +368,11 @@ function isStyledComponents(path) {
         // styled(Component)``
         isStyledIdentifier(tag.callee) ||
         (tag.callee.type === "MemberExpression" &&
-          // styled.foo.attr({})``
           ((tag.callee.object.type === "MemberExpression" &&
-            isStyledIdentifier(tag.callee.object.object)) ||
+            // styled.foo.attr({})``
+            (isStyledIdentifier(tag.callee.object.object) ||
+              // Component.extend.attr({)``
+              isStyledExtend(tag.callee.object))) ||
             // styled(Component).attr({})``
             (tag.callee.object.type === "CallExpression" &&
               isStyledIdentifier(tag.callee.object.callee))))
@@ -386,6 +404,51 @@ function isCssProp(path) {
 
 function isStyledIdentifier(node) {
   return node.type === "Identifier" && node.name === "styled";
+}
+
+function isStyledExtend(node) {
+  return /^[A-Z]/.test(node.object.name) && node.property.name === "extend";
+}
+
+/*
+ * react-relay and graphql-tag
+ * graphql`...`
+ * graphql.experimental`...`
+ * gql`...`
+ * GraphQL comment block
+ *
+ * This intentionally excludes Relay Classic tags, as Prettier does not
+ * support Relay Classic formatting.
+ */
+function isGraphQL(path) {
+  const node = path.getValue();
+  const parent = path.getParentNode();
+
+  // This checks for a leading comment that is exactly `/* GraphQL */`
+  // In order to be in line with other implementations of this comment tag
+  // we will not trim the comment value and we will expect exactly one space on
+  // either side of the GraphQL string
+  // Also see ./clean.js
+  const hasGraphQLComment =
+    node.leadingComments &&
+    node.leadingComments.some(
+      comment =>
+        comment.type === "CommentBlock" && comment.value === " GraphQL "
+    );
+
+  return (
+    hasGraphQLComment ||
+    (parent &&
+      ((parent.type === "TaggedTemplateExpression" &&
+        ((parent.tag.type === "MemberExpression" &&
+          parent.tag.object.name === "graphql" &&
+          parent.tag.property.name === "experimental") ||
+          (parent.tag.type === "Identifier" &&
+            (parent.tag.name === "gql" || parent.tag.name === "graphql")))) ||
+        (parent.type === "CallExpression" &&
+          parent.callee.type === "Identifier" &&
+          parent.callee.name === "graphql")))
+  );
 }
 
 module.exports = embed;

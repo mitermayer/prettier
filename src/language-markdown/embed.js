@@ -1,18 +1,22 @@
 "use strict";
 
+const docUtils = require("../doc/doc-utils");
 const util = require("../common/util");
-const support = require("../common/support");
+const support = require("../main/support");
 const doc = require("../doc");
 const docBuilders = doc.builders;
 const hardline = docBuilders.hardline;
+const literalline = docBuilders.literalline;
 const concat = docBuilders.concat;
 const markAsRoot = docBuilders.markAsRoot;
 
 function embed(path, print, textToDoc, options) {
   const node = path.getValue();
 
-  if (node.type === "code") {
-    const parser = getParserName(node.lang);
+  if (node.type === "code" && node.lang !== null) {
+    // only look for the first string so as to support [markdown-preview-enhanced](https://shd101wyy.github.io/markdown-preview-enhanced/#/code-chunk)
+    const lang = node.lang.split(/\s/, 1)[0];
+    const parser = getParserName(lang);
     if (parser) {
       const styleUnit = options.__inJsTemplate ? "~" : "`";
       const style = styleUnit.repeat(
@@ -24,7 +28,7 @@ function embed(path, print, textToDoc, options) {
           style,
           node.lang,
           hardline,
-          replaceNewlinesWithHardlines(doc),
+          replaceNewlinesWithLiterallines(doc),
           style
         ])
       );
@@ -35,8 +39,7 @@ function embed(path, print, textToDoc, options) {
 
   function getParserName(lang) {
     const supportInfo = support.getSupportInfo(null, {
-      plugins: options.plugins,
-      pluginsLoaded: true
+      plugins: options.plugins
     });
     const language = supportInfo.languages.find(
       language =>
@@ -51,15 +54,15 @@ function embed(path, print, textToDoc, options) {
     return null;
   }
 
-  function replaceNewlinesWithHardlines(doc) {
-    return util.mapDoc(
+  function replaceNewlinesWithLiterallines(doc) {
+    return docUtils.mapDoc(
       doc,
       currentDoc =>
         typeof currentDoc === "string" && currentDoc.includes("\n")
           ? concat(
               currentDoc
                 .split(/(\n)/g)
-                .map((v, i) => (i % 2 === 0 ? v : hardline))
+                .map((v, i) => (i % 2 === 0 ? v : literalline))
             )
           : currentDoc
     );

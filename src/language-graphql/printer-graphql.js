@@ -9,9 +9,8 @@ const softline = docBuilders.softline;
 const group = docBuilders.group;
 const indent = docBuilders.indent;
 const ifBreak = docBuilders.ifBreak;
-const printerOptions = require("./options");
-
-const util = require("../common/util");
+const privateUtil = require("../common/util");
+const sharedUtil = require("../common/util-shared");
 
 function genericPrint(path, options, print) {
   const n = path.getValue();
@@ -31,7 +30,7 @@ function genericPrint(path, options, print) {
       ]);
     }
     case "OperationDefinition": {
-      const hasOperation = options.originalText[util.locStart(n)] !== "{";
+      const hasOperation = options.originalText[options.locStart(n)] !== "{";
       const hasName = !!n.name;
       return concat([
         hasOperation ? n.operation : "",
@@ -251,7 +250,18 @@ function genericPrint(path, options, print) {
         "type ",
         path.call(print, "name"),
         n.interfaces.length > 0
-          ? concat([" implements ", join(", ", path.map(print, "interfaces"))])
+          ? concat([
+              " implements ",
+              join(
+                determineInterfaceSeparator(
+                  options.originalText.substr(
+                    options.locStart(n),
+                    options.locEnd(n)
+                  )
+                ),
+                path.map(print, "interfaces")
+              )
+            ])
           : "",
         printDirectives(path, print, n),
         n.fields.length > 0
@@ -592,7 +602,11 @@ function printSequence(sequencePath, options, print) {
     const printed = print(path);
 
     if (
-      util.isNextLineEmpty(options.originalText, path.getValue()) &&
+      sharedUtil.isNextLineEmpty(
+        options.originalText,
+        path.getValue(),
+        options
+      ) &&
       i < count - 1
     ) {
       return concat([printed, hardline]);
@@ -617,10 +631,27 @@ function printComment(commentPath) {
   }
 }
 
+function determineInterfaceSeparator(originalSource) {
+  const start = originalSource.indexOf("implements");
+  if (start === -1) {
+    throw new Error("Must implement interfaces: " + originalSource);
+  }
+  let end = originalSource.indexOf("{");
+  if (end === -1) {
+    end = originalSource.length;
+  }
+  return originalSource.substr(start, end).includes("&") ? " & " : ", ";
+}
+
+function clean(node, newNode /*, parent*/) {
+  delete newNode.loc;
+  delete newNode.comments;
+}
+
 module.exports = {
-  options: printerOptions,
   print: genericPrint,
-  hasPrettierIgnore: util.hasIgnoreComment,
+  massageAstNode: clean,
+  hasPrettierIgnore: privateUtil.hasIgnoreComment,
   printComment,
   canAttachComment
 };

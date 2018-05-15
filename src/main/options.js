@@ -1,15 +1,15 @@
 "use strict";
 
 const path = require("path");
-const getSupportInfo = require("../common/support").getSupportInfo;
+const getSupportInfo = require("../main/support").getSupportInfo;
 const normalizer = require("./options-normalizer");
-const loadPlugins = require("../common/load-plugins");
 const resolveParser = require("./parser").resolveParser;
-const getPrinter = require("./get-printer");
 
 const hiddenDefaults = {
   astFormat: "estree",
-  printer: {}
+  printer: {},
+  locStart: null,
+  locEnd: null
 };
 
 // Copy options and fill in default values.
@@ -18,13 +18,10 @@ function normalize(options, opts) {
 
   const rawOptions = Object.assign({}, options);
 
-  const plugins = loadPlugins(rawOptions.plugins);
-  rawOptions.plugins = plugins;
-
   const supportOptions = getSupportInfo(null, {
-    plugins,
-    pluginsLoaded: true,
-    showUnreleased: true
+    plugins: options.plugins,
+    showUnreleased: true,
+    showDeprecated: true
   }).options;
   const defaults = supportOptions.reduce(
     (reduced, optionInfo) =>
@@ -47,12 +44,41 @@ function normalize(options, opts) {
     }
   }
 
-  rawOptions.astFormat = resolveParser(rawOptions).astFormat;
-  rawOptions.printer = getPrinter(rawOptions);
+  const parser = resolveParser(
+    !rawOptions.parser
+      ? rawOptions
+      : // handle deprecated parsers
+        normalizer.normalizeApiOptions(
+          rawOptions,
+          [supportOptions.find(x => x.name === "parser")],
+          { passThrough: true, logger: false }
+        )
+  );
+  rawOptions.astFormat = parser.astFormat;
+  rawOptions.locEnd = parser.locEnd;
+  rawOptions.locStart = parser.locStart;
 
-  Object.keys(defaults).forEach(k => {
+  const plugin = getPlugin(rawOptions);
+  rawOptions.printer = plugin.printers[rawOptions.astFormat];
+
+  const pluginDefaults = supportOptions
+    .filter(
+      optionInfo =>
+        optionInfo.pluginDefaults && optionInfo.pluginDefaults[plugin.name]
+    )
+    .reduce(
+      (reduced, optionInfo) =>
+        Object.assign(reduced, {
+          [optionInfo.name]: optionInfo.pluginDefaults[plugin.name]
+        }),
+      {}
+    );
+
+  const mixedDefaults = Object.assign({}, defaults, pluginDefaults);
+
+  Object.keys(mixedDefaults).forEach(k => {
     if (rawOptions[k] == null) {
-      rawOptions[k] = defaults[k];
+      rawOptions[k] = mixedDefaults[k];
     }
   });
 
@@ -67,17 +93,32 @@ function normalize(options, opts) {
   );
 }
 
+function getPlugin(options) {
+  const astFormat = options.astFormat;
+
+  if (!astFormat) {
+    throw new Error("getPlugin() requires astFormat to be set");
+  }
+  const printerPlugin = options.plugins.find(
+    plugin => plugin.printers[astFormat]
+  );
+  if (!printerPlugin) {
+    throw new Error(`Couldn't find plugin for AST format "${astFormat}"`);
+  }
+
+  return printerPlugin;
+}
+
 function inferParser(filepath, plugins) {
   const extension = path.extname(filepath);
   const filename = path.basename(filepath).toLowerCase();
 
   const language = getSupportInfo(null, {
-    plugins,
-    pluginsLoaded: true
+    plugins
   }).languages.find(
     language =>
-      typeof language.since === "string" &&
-      (language.extensions.indexOf(extension) > -1 ||
+      language.since !== null &&
+      ((language.extensions && language.extensions.indexOf(extension) > -1) ||
         (language.filenames &&
           language.filenames.find(name => name.toLowerCase() === filename)))
   );
@@ -85,4 +126,4 @@ function inferParser(filepath, plugins) {
   return language && language.parsers[0];
 }
 
-module.exports = { normalize, hiddenDefaults };
+module.exports = { normalize, hiddenDefaults, inferParser };

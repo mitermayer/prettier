@@ -96,11 +96,16 @@ function print(path, options, print) {
     }
     case "BlockStatement": {
       const pp = path.getParentNode(1);
-      const isElseIf = pp && pp.inverse && pp.inverse.body[0] === n;
+      const isElseIf =
+        pp &&
+        pp.inverse &&
+        pp.inverse.body[0] === n &&
+        pp.inverse.body[0].path.parts[0] === "if";
       const hasElseIf =
         n.inverse &&
         n.inverse.body[0] &&
-        n.inverse.body[0].type === "BlockStatement";
+        n.inverse.body[0].type === "BlockStatement" &&
+        n.inverse.body[0].path.parts[0] === "if";
       const indentElse = hasElseIf ? a => a : indent;
       if (n.inverse) {
         return concat([
@@ -113,6 +118,11 @@ function print(path, options, print) {
             ? indentElse(concat([hardline, path.call(print, "inverse")]))
             : "",
           isElseIf ? "" : concat([hardline, printCloseBlock(path, print)])
+        ]);
+      } else if (isElseIf) {
+        return concat([
+          concat(["{{else ", printPathParams(path, print), "}}"]),
+          indent(concat([hardline, path.call(print, "program")]))
         ]);
       }
       /**
@@ -183,7 +193,37 @@ function print(path, options, print) {
       return concat([n.key, "=", path.call(print, "value")]);
     }
     case "TextNode": {
-      return n.chars.replace(/^\s+/, "").replace(/\s+$/, "");
+      let leadingSpace = "";
+      let trailingSpace = "";
+
+      // preserve a space inside of an attribute node where whitespace present, when next to mustache statement.
+      const inAttrNode = path.stack.indexOf("attributes") >= 0;
+
+      if (inAttrNode) {
+        const parentNode = path.getParentNode(0);
+        const isConcat = parentNode.type === "ConcatStatement";
+        if (isConcat) {
+          const parts = parentNode.parts;
+          const partIndex = parts.indexOf(n);
+          if (partIndex > 0) {
+            const partType = parts[partIndex - 1].type;
+            const isMustache = partType === "MustacheStatement";
+            if (isMustache) {
+              leadingSpace = " ";
+            }
+          }
+          if (partIndex < parts.length - 1) {
+            const partType = parts[partIndex + 1].type;
+            const isMustache = partType === "MustacheStatement";
+            if (isMustache) {
+              trailingSpace = " ";
+            }
+          }
+        }
+      }
+      return n.chars
+        .replace(/^\s+/, leadingSpace)
+        .replace(/\s+$/, trailingSpace);
     }
     case "MustacheCommentStatement": {
       const dashes = n.value.indexOf("}}") > -1 ? "--" : "";
@@ -269,6 +309,8 @@ function printCloseBlock(path, print) {
 }
 
 function clean(ast, newObj) {
+  delete newObj.loc;
+
   // (Glimmer/HTML) ignore TextNode whitespace
   if (ast.type === "TextNode") {
     if (ast.chars.replace(/\s+/, "") === "") {

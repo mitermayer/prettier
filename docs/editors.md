@@ -5,7 +5,12 @@ title: Editor Integration
 
 ## Atom
 
-Atom users can simply install the [prettier-atom](https://github.com/prettier/prettier-atom) package and use `Ctrl+Alt+F` to format a file (or format on save if enabled).
+Atom users can simply install the [prettier-atom] package and use `Ctrl+Alt+F` to format a file (or format on save if enabled).
+
+Alternatively, you can use one the packages below, which behave similarly to [prettier-atom] but have a focus on minimalism.
+
+* [mprettier](https://github.com/t9md/atom-mprettier)
+* [miniprettier](https://github.com/duailibe/atom-miniprettier)
 
 ## Emacs
 
@@ -17,11 +22,9 @@ Vim users can simply install either [sbdchd](https://github.com/sbdchd)/[neoform
 
 ## Visual Studio Code
 
-Can be installed using the extension sidebar. Search for `Prettier - Code formatter`.
+`prettier-vscode` can be installed using the extension sidebar. Search for `Prettier - Code formatter`. It can also be installed using `ext install prettier-vscode` in the command palette. [Check its repository for configuration and shortcuts](https://github.com/prettier/prettier-vscode).
 
-Can also be installed using `ext install prettier-vscode`.
-
-[Check its repository for configuration and shortcuts](https://github.com/prettier/prettier-vscode)
+If you'd like to toggle the formatter on and off, install [`vscode-status-bar-format-toggle`](https://marketplace.visualstudio.com/items?itemName=tombonnike.vscode-status-bar-format-toggle).
 
 ## Visual Studio
 
@@ -34,3 +37,5 @@ Sublime Text support is available through Package Control and the [JsPrettier](h
 ## JetBrains WebStorm, PHPStorm, PyCharm...
 
 See the [WebStorm setup guide](webstorm.md).
+
+[prettier-atom]: https://github.com/prettier/prettier-atom
